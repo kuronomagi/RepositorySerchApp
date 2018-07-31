@@ -13,20 +13,22 @@ import {
   Text,
   View,
   TouchableOpacity,
-  FlatList
+  FlatList,
+  TextInput
 } from 'react-native';
 
 export default class App extends Component<{}> {
   state = {
     items: [],
     refreshing: false,
+    text: '',
   }
   page = 0;
 
   fetchRepositories(refreshing = false) {
     const newPage = refreshing ? 1 : this.page + 1;
     this.setState({ refreshing });
-    fetch(`https://api.github.com/search/repositories?q=react&page=${newPage}`)
+    fetch(`https://api.github.com/search/repositories?q=${this.state.text}&page=${newPage}`)
     .then(response => response.json())
     .then(({ items }) => {
       this.page = newPage;
@@ -46,6 +48,12 @@ export default class App extends Component<{}> {
   render() {
     return (
       <View style={styles.container}>
+        <View style={styles.inputWrapper}>
+          <TextInput style={styles.input} onChangeText={(text) => this.setState({ text })} />
+          <TouchableOpacity onPress={() => this.fetchRepositories(true)}>
+            <Text state={styles.serchText}>Search</Text>
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity style={{ marginTop: 20 }} onPress={() => this.fetchRepositories()}>
           <Text>Fetch</Text>
         </TouchableOpacity>
@@ -72,4 +80,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5FCFF',
   },
+  inputWrapper: {
+    padding: 20,
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    alignItems: 'center',
+  },
+  input: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#eee',
+    marginRight: 10,
+    borderRadius: 4,
+  },
+  serchText: {
+    padding: 10,
+  }
 });
