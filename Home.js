@@ -14,7 +14,8 @@ import {
   View,
   TouchableOpacity,
   FlatList,
-  TextInput
+  TextInput,
+  Image
 } from 'react-native';
 
 export default class App extends Component<{}> {
@@ -60,8 +61,12 @@ export default class App extends Component<{}> {
         <FlatList
           data={this.state.items}
           renderItem={({ item }) =>
-            <TouchableOpacity onPress={() => this.navigateToDetail(item)}>
-              <Text style={{ padding: 20 }}>{item.name}</Text>
+            <TouchableOpacity style={{ padding: 10 }} onPress={() => this.navigateToDetail(item)}>
+              <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>{item.name}</Text>
+              <View style={{ flexDirection: 'row' }}>
+                <Image style={styles.ownerIcon} source={{ url: item.owner.avatar_url }}/>
+                <Text style={styles.ownerName}>{item.owner.login}</Text>
+              </View>
             </TouchableOpacity>
           }
           keyExtractor={(item) => item.url}
@@ -95,5 +100,14 @@ const styles = StyleSheet.create({
   },
   serchText: {
     padding: 10,
-  }
+  },
+  ownerIcon: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    marginRight: 5,
+  },
+  ownerName: {
+    fontSize: 14
+  },
 });

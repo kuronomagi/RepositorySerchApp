@@ -6,6 +6,11 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: 'white',
   },
+  fullName: {
+    fontSize: 24,
+    marginBottom: 15,
+    fontWeight: 'bold',
+  },
   repoName: {
     fontSize: 20,
     fontWeight: 'bold',
