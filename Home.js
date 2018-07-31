@@ -15,7 +15,8 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
-  Image
+  Image,
+  AppState
 } from 'react-native';
 
 export default class App extends Component<{}> {
@@ -45,6 +46,22 @@ export default class App extends Component<{}> {
     this.props.navigation.navigate('Detail', { item }); // App.jsのStackNavigatorで設定したキーを入れると、reactでページ遷移ができる, パラメータを渡す時は第二引数にobject
   }
 
+  componentDidMount() {
+    AppState.addEventListener('change', this.onChangeState);
+  }
+
+  componentWillMount() {
+    AppState.removeEventListener('change', this.onChangeState);
+  }
+
+  onChangeState = (appState) => {
+    // アロー関数にしない場合はthisの束縛が必要
+
+    if(appState === 'active') {
+      this.fetchRepositories(true);
+    }
+  }
+
 
   render() {
     return (
@@ -55,9 +72,9 @@ export default class App extends Component<{}> {
             <Text state={styles.serchText}>Search</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={{ marginTop: 20 }} onPress={() => this.fetchRepositories()}>
+        {/*<TouchableOpacity style={{ marginTop: 20 }} onPress={() => this.fetchRepositories()}>
           <Text>Fetch</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>*/}
         <FlatList
           data={this.state.items}
           renderItem={({ item }) =>
